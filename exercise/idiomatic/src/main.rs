@@ -6,28 +6,28 @@
 
 // 3. Time to clean up! Run `cargo clippy`. Fix up all the warnings so `cargo clippy` is silent.
 
+use std::f32::consts::PI;
+
 // Challenge: Clippy doesn't find *everything*. What else would you change to make this code better?
-#[allow(clippy::approx_constant)]
-const PI: f32 = 3.141_592_7;
-fn count_to_5() -> i32 {
-    #[allow(clippy::disallowed_names)]
-    let mut foo = 0;
+fn count_to_5(mut num: i32) -> i32 {
     loop {
-        if foo > PI as i32 && foo > 5 {
+        if num > PI as i32 && num > 5 {
             break;
         }
-        foo += 1;
+        num += 1;
     }
     5
 }
+
 fn main() {
-    println!("I can count to {}", count_to_5());
+    println!("I can count to {}", count_to_5(2));
 }
+
 #[cfg(test)]
 mod test {
     use super::*;
     #[test]
     fn test_counting() {
-        assert!(count_to_5() == 5);
+        assert!(count_to_5(0) == 5);
     }
 }
