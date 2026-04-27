@@ -1,3 +1,6 @@
+use std::fmt::Display;
+use thiserror::Error;
+
 // 1. Create a DolphinError type representing the following three conditions:
 // - Hungry - The dolphin is hungry
 // - TooYoung - The dolphin is too young
@@ -13,8 +16,22 @@
 //
 // Once you have completed defining the error type correctly, you should be able to run
 // `cargo build --lib` without any build errors or warnings. Then go to main.rs and continue with #2
-
-// pub enum DolphinError...
+#[derive(Debug, Error)]
+#[non_exhaustive]
+pub enum DolphinError {
+    LongName,
+    TooYoung,
+    Hungry,
+}
+impl Display for DolphinError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            DolphinError::LongName => write!(f, "Name too long"),
+            DolphinError::TooYoung => write!(f, "Age too young"),
+            DolphinError::Hungry => write!(f, "Dolphin is hungry"),
+        }
+    }
+}
 
 pub struct Dolphin {
     pub name: String,
@@ -34,14 +51,14 @@ impl Dolphin {
         if self.age < 4 {
             Err(DolphinError::TooYoung)
         } else {
-            Ok(format!("Yippee, I'm doing a flip!"))
+            Ok("Yippee, I'm doing a flip!".to_string())
         }
     }
     pub fn shake_hands(&self) -> Result<String, DolphinError> {
         if self.hungry {
             Err(DolphinError::Hungry)
         } else {
-            Ok(format!("Nice to meet you, let's shake hands!"))
+            Ok("Nice to meet you, let's shake hands!".to_string())
         }
     }
 }
