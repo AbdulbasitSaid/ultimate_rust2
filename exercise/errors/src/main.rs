@@ -1,7 +1,7 @@
 // START IN lib.rs!
 
 use anyhow::{Context, Result};
-use aquarium::{Dolphin, DolphinError};
+use aquarium::Dolphin;
 // Silence some warnings so they don't distract from the exercise.
 #[allow(clippy::vec_init_then_push)]
 
@@ -12,22 +12,19 @@ use aquarium::{Dolphin, DolphinError};
 // - Have the play_time function return a `Result<Vec<String>>`. The vector of Strings will
 //   represent successful outcomes of various dolphin tricks.
 
-fn play_time(dolphin: &Dolphin) -> Result<Vec<String>, DolphinError> {
+fn play_time(dolphin: &Dolphin) -> Result<Vec<String>> {
     let mut responses = vec![];
     // 2b. Call the .say_your_name() method on `dolphin`, use `?` to unwrap the value, and push
     // the value onto the `responses` vector.
     //
 
-    let response = Dolphin::say_your_name(dolphin)?;
     // this can be done with an intermediate variable...
-    responses.push(response); // ...or all on one line. Either way is fine!
-                              //
-                              // 2c. Do the same thing as #2b for the .flip() method
-    let response = Dolphin::flip(dolphin)?;
-    responses.push(response);
+    responses.push(dolphin.say_your_name()?); // ...or all on one line. Either way is fine!
+                                              //
+                                              // 2c. Do the same thing as #2b for the .flip() method
+    responses.push(dolphin.flip()?);
     // 2d. Do the same thing as #2b for the .shake_hands() method
-    let response = Dolphin::shake_hands(dolphin)?;
-    responses.push(response);
+    responses.push(dolphin.shake_hands()?);
     Ok(responses)
 }
 
@@ -62,16 +59,16 @@ fn main() -> Result<()> {
         // returns an Err variant the first time it is called, the try operator will return it from
         // main(), which will end the program at the first error. anyhow's Result will take care of
         // formatting the error output for us.
-        // match play_time(dolphin) {
-        //     Ok(responses) => {
-        //         println!("{} did a FABULOUS PERFORMANCE!", dolphin.name);
-        //         for response in responses {
-        //             println!("  {}", response);
-        //         }
-        //     }
-        //     Err(e) => println!("{} can't perform today: {}", dolphin.name, e),
-        // }
-        play_time(dolphin).context("Error challenge")?;
+        match play_time(dolphin) {
+            Ok(responses) => {
+                println!("{} did a FABULOUS PERFORMANCE!", dolphin.name);
+                for response in responses {
+                    println!("  {}", response);
+                }
+            }
+            Err(e) => println!("{} can't perform today: {}", dolphin.name, e),
+        }
+        // play_time(dolphin).context("Error challenge")?;
     }
     Ok(())
 }

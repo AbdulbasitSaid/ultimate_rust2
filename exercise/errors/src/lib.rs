@@ -1,4 +1,3 @@
-use std::fmt::Display;
 use thiserror::Error;
 
 // 1. Create a DolphinError type representing the following three conditions:
@@ -19,18 +18,12 @@ use thiserror::Error;
 #[derive(Debug, Error)]
 #[non_exhaustive]
 pub enum DolphinError {
+    #[error("The dolphin's name is too long and annoying to say")]
     LongName,
+    #[error("The dolphin is too young")]
     TooYoung,
+    #[error("The dolphin is hungry")]
     Hungry,
-}
-impl Display for DolphinError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            DolphinError::LongName => write!(f, "Name too long"),
-            DolphinError::TooYoung => write!(f, "Age too young"),
-            DolphinError::Hungry => write!(f, "Dolphin is hungry"),
-        }
-    }
 }
 
 pub struct Dolphin {
